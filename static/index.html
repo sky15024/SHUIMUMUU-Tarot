@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-5SL4XJ6V');</script>
+    <!-- End Google Tag Manager -->
+
+    <title>SHUIMUMUU 星空極光塔羅 ✨ 每日運勢占卜</title>
+    <meta name="description" content="水木沐沐星空極光塔羅 — 輸入你的心情與煩惱，抽一張塔羅牌，AI 為你解讀今日運勢與轉運小任務。免費線上塔羅占卜工具。">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SHUIMUMUU 星空極光塔羅 ✨ 每日運勢占卜">
+    <meta property="og:description" content="輸入心情，抽一張塔羅牌，AI 為你解讀今日運勢與轉運小任務！免費線上塔羅占卜工具。">
+    <meta property="og:image" content="https://shuimumuu-tarot.mixytalk.com/static/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://shuimumuu-tarot.mixytalk.com">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:image" content="https://shuimumuu-tarot.mixytalk.com/static/og-image.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- PWA -->
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#0a0a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="星空塔羅">
+    <link rel="apple-touch-icon" href="/static/images/pwa-icon-512.png">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script>
+      firebase.initializeApp({
+        apiKey: "AIzaSyDRlPEOIuqVMzQ7Gjf5iaiU1kg7El9qNHE",
+        authDomain: "tarot-project-8491e.firebaseapp.com",
+        projectId: "tarot-project-8491e",
+        storageBucket: "tarot-project-8491e.firebasestorage.app",
+        messagingSenderId: "321291496915",
+        appId: "1:321291496915:web:f4f5c641db024497edd326",
+        measurementId: "G-K7TEYNV0N4"
+      });
+      window.__firestore = firebase.firestore();
+    </script>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5SL4XJ6V"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager -->
+
+    <!-- 星空粒子背景 -->
+    <canvas id="starfield"></canvas>
+
+    <!-- 瀏覽人次計數器（固定右上角） -->
+    <div class="visitor-counter" id="visitor-counter" style="display:none;">
+        <span class="visitor-icon">⭐</span>
+        <span class="visitor-text">星空下的人：<strong id="visitor-count">0</strong></span>
+    </div>
+
+    <!-- 主佈局：三欄 -->
+    <div class="layout">
+
+
+        <!-- 中間主內容 -->
+        <main class="main-content">
+            <!-- LOGO & 標題 -->
+            <header class="site-header" id="site-header">
+                <h1 class="site-title">
+                    <span class="title-star">✦</span>
+                    <span class="title-text">星空極光塔羅</span>
+                    <span class="title-star">✦</span>
+                </h1>
+                <p class="site-subtitle">SHUIMUMUU TAROT</p>
+                <p class="site-desc">讓星辰為你指引方向</p>
+            </header>
+
+            <!-- 輸入區域 -->
+            <section class="input-section" id="input-section">
+                <div class="glass-card">
+                    <!-- 模式切換器 -->
+                    <div class="mode-switcher" id="mode-switcher">
+                        <button class="mode-btn active" data-mode="meditate" id="mode-meditate">
+                            🧘‍♀️ 默念問題
+                        </button>
+                        <button class="mode-btn" data-mode="manual" id="mode-manual">
+                            ✍️ 手動輸入
+                        </button>
+                    </div>
+
+                    <div id="input-container-meditate" class="input-container active">
+                        <div class="meditate-prompt">
+                            <span class="meditate-icon">✨</span>
+                            <p>請閉上眼睛，深呼吸...</p>
+                            <p>在心中專注默念你想問的問題。</p>
+                            <p>準備好後，點擊下方按鈕開始占卜。</p>
+                        </div>
+                    </div>
+
+                    <div id="input-container-manual" class="input-container" style="display: none;">
+                        <label for="user-input" class="input-label">
+                            <span class="label-icon">🌙</span>
+                            今天的你，想說些什麼呢？
+                        </label>
+                        <textarea
+                            id="user-input"
+                            class="user-textarea"
+                            placeholder="可以聊聊今天的心情、遇到的煩惱、預計的行程安排...&#10;&#10;例如：今天上班壓力好大，下午要跟主管開會，有點緊張..."
+                            rows="4"
+                            maxlength="350"
+                        ></textarea>
+                        <div class="char-count"><span id="char-count">0</span>/350</div>
+                    </div>
+
+                    <button id="draw-btn" class="draw-button">
+                        <span class="btn-glow"></span>
+                        <span class="btn-text">✨ 開始占卜 ✨</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 塔羅牌展示區 -->
+            <section class="card-section" id="card-section" style="display:none;">
+                <div class="tarot-card-container" id="tarot-card-container">
+                    <div class="tarot-card" id="tarot-card">
+                        <div class="card-flash" id="card-flash"></div>
+                        <div class="card-face card-back">
+                            <img src="/static/images/牌背.png" alt="SHUIMUMUU TAROT" class="card-back-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="card-back-design" style="display:none;">
+                                <div class="card-back-border">
+                                    <div class="card-back-inner">
+                                        <div class="card-back-star">✦</div>
+                                        <div class="card-back-title">SHUIMUMUU</div>
+                                        <div class="card-back-subtitle">TAROT</div>
+                                        <div class="card-back-star">✦</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-face card-front">
+                            <div class="card-front-content" id="card-front-content" style="height: 100%;">
+                                <div class="card-image-wrapper" style="height: 100%;">
+                                    <img id="card-image" src="" alt="" class="card-image" style="height: 100%; object-fit: cover;">
+                                    <div class="card-image-fallback" id="card-image-fallback">
+                                        <div class="fallback-symbol" id="fallback-symbol">☆</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-info-display" id="card-info-display" style="display:none;">
+                    <div class="card-name-zh" id="card-name-zh"></div>
+                    <div class="card-name-en" id="card-name-en"></div>
+                    <div class="card-orientation" id="card-orientation"></div>
+                </div>
+
+                <div class="card-keywords" id="card-keywords" style="display:none;"></div>
+            </section>
+
+            <!-- AI 解讀結果 -->
+            <section class="result-section" id="result-section" style="display:none;">
+                <div class="glass-card result-card">
+                    <!-- 載入中動畫 -->
+                    <div class="loading-indicator" id="loading-indicator">
+                        <div class="loading-orb"></div>
+                        <p class="loading-text">正在與宇宙頻率連結，請等待星辰回應...</p>
+                    </div>
+                    <!-- 解讀結果 -->
+                    <div class="interpretation" id="interpretation" style="display:none;">
+                        <div class="interp-section">
+                            <h2 class="section-title"><span class="section-icon">🌟</span> 星空的回應</h2>
+                            <div class="dialogue-text" id="dialogue-text"></div>
+                        </div>
+                        <div class="interp-section">
+                            <h2 class="section-title"><span class="section-icon">🔮</span> 今日運勢</h2>
+                            <div class="fortune-grid" id="fortune-grid">
+                                <div class="fortune-item" id="fortune-overall">
+                                    <span class="fortune-label">✨ 整體</span>
+                                    <span class="fortune-value"></span>
+                                </div>
+                                <div class="fortune-item" id="fortune-love">
+                                    <span class="fortune-label">💕 感情</span>
+                                    <span class="fortune-value"></span>
+                                </div>
+                                <div class="fortune-item" id="fortune-work">
+                                    <span class="fortune-label">💼 工作</span>
+                                    <span class="fortune-value"></span>
+                                </div>
+                                <div class="fortune-item" id="fortune-money">
+                                    <span class="fortune-label">💰 財運</span>
+                                    <span class="fortune-value"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="interp-section">
+                            <h2 class="section-title"><span class="section-icon">🍀</span> 轉運小任務</h2>
+                            <div class="lucky-task" id="lucky-task"></div>
+                        </div>
+                        <div class="interp-section">
+                            <h2 class="section-title"><span class="section-icon">💝</span> 溫馨小提醒</h2>
+                            <div class="reminder-text" id="reminder-text"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 社群分享按鈕 -->
+                <div class="share-buttons" id="share-buttons" style="display:none;">
+                  <button class="share-btn share-fb" onclick="shareTo('fb')" title="Facebook">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                  </button>
+                  <button class="share-btn share-line" onclick="shareTo('line')" title="LINE">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+                  </button>
+                  <button class="share-btn share-ig" onclick="shareTo('ig')" title="Instagram">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                  </button>
+                  <button class="share-btn share-threads" onclick="shareTo('threads')" title="Threads">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.182.408-2.256 1.33-3.022.88-.733 2.064-1.146 3.524-1.233 1.094-.065 2.11.044 3.043.288-.058-1.097-.393-1.93-.998-2.476-.68-.614-1.698-.926-3.032-.926h-.064c-1.076.013-1.96.272-2.625.77l-1.12-1.643c.953-.678 2.18-1.058 3.66-1.127l.147-.003c1.876 0 3.399.52 4.53 1.546.995.902 1.613 2.18 1.838 3.794.396.168.768.366 1.113.59 1.14.738 1.975 1.726 2.417 2.862.786 2.02.657 4.836-1.594 7.039C19.086 22.48 16.83 23.277 13.76 23.304zm-.9-5.918c1.161-.064 2.043-.467 2.621-1.2.463-.587.78-1.379.94-2.353-.94-.283-1.965-.418-3.062-.357-1.778.1-2.86.882-2.806 2.022.028.491.263.947.662 1.288.477.406 1.14.627 1.862.627.1 0 .243-.012.384-.027z"/></svg>
+                  </button>
+                  <button class="share-btn share-copy" onclick="shareTo('copy')" title="複製連結">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  </button>
+                </div>
+
+                <!-- 再抽一次 -->
+                <button id="retry-btn" class="retry-button" style="display:none;">
+                    <span class="btn-text">🔄 再抽一次</span>
+                </button>
+            </section>
+
+            <!-- 頁尾 -->
+            <footer class="site-footer">
+                <p>© 2026 SHUIMUMUU 水母姆 — 星空極光塔羅</p>
+                <p class="footer-note">塔羅牌解讀僅供娛樂參考，請保持正向心態 ✨</p>
+            </footer>
+        </main>
+
+    </div>
+
+    <!-- ========== 左側互動側邊欄 ========== -->
+    <div class="left-sidebar-container">
+        <!-- 療癒室 -->
+        <div class="left-tab" id="tab-healing">
+            <button class="left-toggle-btn" data-panel="panel-healing">💖<br>療<br>癒<br>室</button>
+            <div class="left-panel" id="panel-healing">
+                <div class="left-panel-header">💖 療癒室</div>
+                <div class="left-panel-body">
+                    <p class="left-panel-desc">摸摸我的頭，安撫你的內心小孩吧！</p>
+                    <div class="interactive-area" id="area-healing">
+                        <img src="/static/images/角色A-正常.png" alt="療癒小孩" class="interactive-char" id="char-healing" draggable="false"
+                             onmouseover="this.src='/static/images/角色A-被摸.png'"
+                             onmouseout="this.src='/static/images/角色A-正常.png'">
+                        <div id="healing-particles" class="particle-container"></div>
+                    </div>
+                    <div class="interaction-score">安撫指數：<span id="score-healing">0</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 受刑室 -->
+        <div class="left-tab" id="tab-punish">
+            <button class="left-toggle-btn" data-panel="panel-punish">💢<br>受<br>刑<br>室</button>
+            <div class="left-panel" id="panel-punish">
+                <div class="left-panel-header">💢 受刑室</div>
+                <div class="left-panel-body">
+                    <p class="left-panel-desc">點擊痛毆小人，發洩你的不滿！</p>
+                    <input type="text" id="punish-target-name" class="punish-input" placeholder="輸入你想痛毆的對象..." maxlength="10">
+                    <div class="interactive-area" id="area-punish">
+                        <div id="target-name-display" class="target-name-display"></div>
+                        <img src="/static/images/punching_villain_doll.png?v=2" alt="受氣包" class="interactive-char" id="char-punish" draggable="false">
+                        <div id="punish-particles" class="particle-container"></div>
+                    </div>
+                    <div class="interaction-score">連擊次數：<span id="score-punish">0</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 音樂室 -->
+        <div class="left-tab" id="tab-music">
+            <button class="left-toggle-btn" data-panel="panel-music">🎵<br>音<br>樂<br>室</button>
+            <div class="left-panel" id="panel-music">
+                <div class="left-panel-header">🎵 音樂室</div>
+                <div class="left-panel-body">
+                    <p class="left-panel-desc">讓星空旋律，放鬆你的身心。</p>
+                    <a href="https://www.youtube.com/@SHUIMUMUU水母姆" target="_blank" rel="noopener noreferrer" class="music-banner">
+                        <div class="music-icon">
+                            <svg viewBox="0 0 24 24" width="28" height="28" fill="#FF0000">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                        </div>
+                        <div class="music-text">前往 SHUIMUMUU<br>水母姆的音樂頻道</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 安裝捷徑 -->
+        <div class="left-tab" id="tab-install">
+            <button class="left-toggle-btn" data-panel="panel-install">📲<br>下<br>載</button>
+            <div class="left-panel" id="panel-install">
+                <div class="left-panel-header">📲 加到手機桌面</div>
+                <div class="left-panel-body">
+                    <p class="left-panel-desc">把星空極光塔羅加到桌面，隨時占卜！</p>
+                    <!-- Android / 支援 PWA 的瀏覽器 -->
+                    <div id="install-native" class="install-guide" style="display:none;">
+                        <button id="install-pwa-btn" class="install-pwa-button">
+                            <span class="install-btn-icon">⬇️</span>
+                            <span>一鍵安裝到桌面</span>
+                        </button>
+                    </div>
+                    <!-- iOS Safari -->
+                    <div id="install-ios" class="install-guide" style="display:none;">
+                        <div class="install-steps">
+                            <div class="install-step">
+                                <span class="step-num">1</span>
+                                <span>點擊底部的 <strong class="install-highlight">分享按鈕</strong></span>
+                                <span class="step-icon">⬆️</span>
+                            </div>
+                            <div class="install-step">
+                                <span class="step-num">2</span>
+                                <span>選擇 <strong class="install-highlight">「加入主畫面」</strong></span>
+                                <span class="step-icon">➕</span>
+                            </div>
+                            <div class="install-step">
+                                <span class="step-num">3</span>
+                                <span>點擊右上角 <strong class="install-highlight">「新增」</strong></span>
+                                <span class="step-icon">✅</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Android Chrome 手動 -->
+                    <div id="install-android-manual" class="install-guide" style="display:none;">
+                        <div class="install-steps">
+                            <div class="install-step">
+                                <span class="step-num">1</span>
+                                <span>點擊右上角 <strong class="install-highlight">⋮ 選單</strong></span>
+                                <span class="step-icon">⋮</span>
+                            </div>
+                            <div class="install-step">
+                                <span class="step-num">2</span>
+                                <span>選擇 <strong class="install-highlight">「加到主畫面」</strong></span>
+                                <span class="step-icon">📲</span>
+                            </div>
+                            <div class="install-step">
+                                <span class="step-num">3</span>
+                                <span>點擊 <strong class="install-highlight">「新增」</strong> 完成！</span>
+                                <span class="step-icon">✅</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 桌面版 -->
+                    <div id="install-desktop" class="install-guide" style="display:none;">
+                        <p class="install-desktop-text">請點擊按鈕建立桌面捷徑</p>
+                    </div>
+                    <!-- 已安裝 -->
+                    <div id="install-done" class="install-guide" style="display:none;">
+                        <div class="install-done-msg">
+                            <span class="install-done-icon">✅</span>
+                            <p>已安裝到桌面囉！</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 廣告插頁彈窗 -->
+    <div id="ad-modal" class="ad-modal">
+      <div class="ad-modal-backdrop" onclick="closeAdModal()"></div>
+      <div class="ad-modal-content">
+        <button class="ad-modal-close" onclick="closeAdModal()" title="關閉">✕</button>
+        <a id="ad-modal-link" href="https://www.gametower.com.tw/Action/partygo/mixytalk0416/index.html?utm_source=shuimumuu-tarot&utm_medium=display&utm_campaign=mega_traffic_2026&utm_content=interstitial" target="_blank" rel="noopener noreferrer">
+          <img src="https://ad.gametower.com.tw/Action/partygo/mixytalk0416/banner.png" alt="推薦活動" class="ad-modal-img">
+        </a>
+      </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+      // 註冊 Service Worker
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/static/sw.js', { scope: '/' })
+          .then(function(reg) { console.log('SW registered:', reg.scope); })
+          .catch(function(err) { console.warn('SW registration failed:', err); });
+      }
+
+      // 瀏覽人次計數器
+      (function() {
+        var db = window.__firestore;
+        if (!db) return;
+        var counterRef = db.collection('counters').doc('shuimumuu-tarot');
+        counterRef.update({
+          views: firebase.firestore.FieldValue.increment(1)
+        }).catch(function() {
+          return counterRef.set({ views: 1 });
+        }).then(function() {
+          return counterRef.get();
+        }).then(function(doc) {
+          if (doc && doc.exists) {
+            var count = doc.data().views;
+            document.getElementById('visitor-count').textContent = count.toLocaleString();
+            document.getElementById('visitor-counter').style.display = 'flex';
+          }
+        }).catch(function(err) {
+          console.error('Counter error:', err);
+        });
+      })();
+    </script>
+</body>
+</html>
