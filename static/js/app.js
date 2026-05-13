@@ -389,6 +389,7 @@ async function showInterpretation(data) {
     if (shareButtons) shareButtons.style.display = 'flex';
 
     // 捲動到結果區域頂部，確保使用者能看到「星空的回應」
+    const resultSection = document.getElementById('result-section');
     resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
