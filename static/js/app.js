@@ -121,7 +121,10 @@ async function handleDraw() {
     isDrawing = true;
 
     const userInput = document.getElementById('user-input').value.trim();
-    if (currentMode === 'manual' && !userInput) return;
+    if (currentMode === 'manual' && !userInput) { isDrawing = false; return; }
+
+    // 每次占卜前先彈出廣告，等使用者關閉後才繼續
+    await showAdModal();
 
     const drawBtn = document.getElementById('draw-btn');
     drawBtn.disabled = true;
@@ -384,9 +387,6 @@ async function showInterpretation(data) {
     // 顯示分享按鈕
     const shareButtons = document.getElementById('share-buttons');
     if (shareButtons) shareButtons.style.display = 'flex';
-
-    // 第一次抽牌完成時，彈出廣告插頁
-    showAdOnce();
 
     // 捲動到結果區域頂部，確保使用者能看到「星空的回應」
     resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -900,20 +900,25 @@ function showShareToast(msg) {
 }
 
 /* ========== 廣告插頁彈窗 ========== */
-var _adShown = false;
+var _adCloseResolve = null;
 
-function showAdOnce() {
-  if (_adShown) return;
-  _adShown = true;
-  var modal = document.getElementById('ad-modal');
-  if (modal) {
+function showAdModal() {
+  return new Promise(function(resolve) {
+    var modal = document.getElementById('ad-modal');
+    if (!modal) { resolve(); return; }
+    _adCloseResolve = resolve;
     modal.classList.add('show');
-  }
+  });
 }
 
 function closeAdModal() {
   var modal = document.getElementById('ad-modal');
   if (modal) {
     modal.classList.remove('show');
+  }
+  // 通知 handleDraw 繼續執行
+  if (_adCloseResolve) {
+    _adCloseResolve();
+    _adCloseResolve = null;
   }
 }
