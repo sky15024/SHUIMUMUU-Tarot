@@ -823,7 +823,7 @@ function openUrl(url) {
 
 // 分享功能（不可加 async！popup blocker 會擋）
 function shareTo(platform) {
-  var url = window.location.href;
+  var url = 'https://sky15024.github.io/SHUIMUMUU-Tarot/';
   var text = '✨ 我剛在星空極光塔羅抽了一張牌，來看看你的今日運勢吧！';
   var fullText = encodeURIComponent(text + ' ' + url);
 
