@@ -153,15 +153,27 @@
             var frames = ['', '.', '..', '...'];
             setInterval(function(){ dots.textContent = frames[++i % 4]; }, 400);
         })();
-        // 頁面載入完成後淡出
+        // 頁面載入完成後淡出（PWA 快取啟動時，會等待 Render 喚醒）
         window.addEventListener('load', function(){
-            setTimeout(function(){
-                var el = document.getElementById('splash-loading');
-                if (el) {
-                    el.classList.add('splash-hide');
-                    setTimeout(function(){ el.remove(); }, 900);
-                }
-            }, 600); // 給一點緩衝讓畫面渲染完成
+            var checkServer = function() {
+                fetch('/api/draw', { method: 'POST' })
+                    .then(function(res) {
+                        if (res.ok) {
+                            var el = document.getElementById('splash-loading');
+                            if (el) {
+                                el.classList.add('splash-hide');
+                                setTimeout(function(){ el.remove(); }, 900);
+                            }
+                        } else {
+                            setTimeout(checkServer, 3000); // 如果還沒醒，3秒後再試
+                        }
+                    })
+                    .catch(function() {
+                        setTimeout(checkServer, 3000);
+                    });
+            };
+            // 給一點緩衝再開始檢查
+            setTimeout(checkServer, 600);
         });
     </script>
 

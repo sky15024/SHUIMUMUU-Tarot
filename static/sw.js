@@ -3,7 +3,7 @@
    策略：全部改為 Network First (網路優先)，確保隨時抓取最新版面
    ============================================ */
 
-const CACHE_NAME = 'shuimumuu-tarot-v2';
+const CACHE_NAME = 'shuimumuu-tarot-v3';
 const STATIC_ASSETS = [
   '/',
   '/static/css/style.css',
@@ -52,6 +52,11 @@ self.addEventListener('fetch', (event) => {
   // 靜態資源與頁面 → 網路優先，失敗才讀取快取
   event.respondWith(
     fetch(event.request).then((response) => {
+      // 判斷是否為 Render 喚醒畫面 (通常是 503 Service Unavailable)
+      if (!response.ok && response.status === 503) {
+        return caches.match(event.request).then(cached => cached || response);
+      }
+
       // 成功取得最新資源，動態更新快取
       if (response.ok && url.origin === self.location.origin) {
         const clone = response.clone();
