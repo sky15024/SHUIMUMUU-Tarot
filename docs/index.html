@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHUIMUMUU 星空極光塔羅 ✨ 每日運勢占卜</title>
+    <meta name="description" content="水木沐沐星空極光塔羅 — 輸入你的心情與煩惱，抽一張塔羅牌，AI 為你解讀今日運勢與轉運小任務。免費線上塔羅占卜工具。">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SHUIMUMUU 星空極光塔羅 ✨ 每日運勢占卜">
+    <meta property="og:description" content="輸入心情，抽一張塔羅牌，AI 為你解讀今日運勢與轉運小任務！免費線上塔羅占卜工具。">
+    <meta property="og:image" content="https://shuimumuu-tarot.onrender.com/static/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#0a0a2e">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at 30% 20%, rgba(40, 20, 80, 0.4) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 80%, rgba(0, 60, 120, 0.3) 0%, transparent 60%),
+                        linear-gradient(135deg, #0a0a2e 0%, #1a0a3e 40%, #0d1b3e 100%);
+            font-family: 'Noto Sans TC', 'Segoe UI', sans-serif;
+            overflow: hidden;
+        }
+
+        /* 星星閃爍 */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.15; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+        .star {
+            position: fixed;
+            width: 3px; height: 3px;
+            background: rgba(200, 210, 255, 0.8);
+            border-radius: 50%;
+            animation: twinkle ease-in-out infinite;
+        }
+
+        /* 水晶球浮動 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-14px) scale(1.06); }
+        }
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(180,160,255,0.3), 0 0 60px rgba(120,100,220,0.15); }
+            50% { box-shadow: 0 0 50px rgba(180,160,255,0.5), 0 0 100px rgba(120,100,220,0.3), 0 0 150px rgba(80,60,180,0.1); }
+        }
+        .crystal-ball {
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, rgba(200,180,255,0.4), rgba(100,80,200,0.15) 60%, transparent);
+            animation: float 2.5s ease-in-out infinite, glow-pulse 3s ease-in-out infinite;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 40px;
+            margin-bottom: 32px;
+        }
+
+        /* 品牌 */
+        .brand-title {
+            font-size: 22px; font-weight: 600;
+            color: rgba(220, 210, 255, 0.95);
+            letter-spacing: 6px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(180,160,255,0.4);
+        }
+        .brand-sub {
+            font-size: 11px;
+            color: rgba(180,170,220,0.6);
+            letter-spacing: 5px;
+            margin-bottom: 40px;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Loading 提示 */
+        .loading-msg {
+            font-size: 15px;
+            color: rgba(200, 190, 240, 0.85);
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        /* 進度條 */
+        .progress-track {
+            width: 220px; height: 3px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        @keyframes progress-slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+        .progress-bar {
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(180,160,255,0.6), transparent);
+            border-radius: 4px;
+            animation: progress-slide 1.8s ease-in-out infinite;
+        }
+
+        /* 狀態文字 */
+        .status-text {
+            font-size: 12px;
+            color: rgba(160, 150, 200, 0.5);
+            letter-spacing: 1px;
+            min-height: 18px;
+        }
+
+        /* 淡出 */
+        .fade-out {
+            animation: fadeAway 0.6s ease forwards;
+        }
+        @keyframes fadeAway {
+            to { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 星星背景 -->
+    <div class="star" style="top:5%;left:12%;animation-duration:2.2s;animation-delay:0s;"></div>
+    <div class="star" style="top:8%;left:78%;animation-duration:2.8s;animation-delay:0.3s;width:2px;height:2px;"></div>
+    <div class="star" style="top:15%;left:45%;animation-duration:3.1s;animation-delay:0.7s;"></div>
+    <div class="star" style="top:22%;left:88%;animation-duration:2.5s;animation-delay:1.1s;width:2px;height:2px;"></div>
+    <div class="star" style="top:30%;left:8%;animation-duration:2.9s;animation-delay:0.5s;"></div>
+    <div class="star" style="top:38%;left:65%;animation-duration:3.3s;animation-delay:1.3s;width:4px;height:4px;"></div>
+    <div class="star" style="top:48%;left:22%;animation-duration:2.1s;animation-delay:0.2s;"></div>
+    <div class="star" style="top:55%;left:92%;animation-duration:2.7s;animation-delay:0.9s;width:2px;height:2px;"></div>
+    <div class="star" style="top:65%;left:35%;animation-duration:3.0s;animation-delay:1.5s;"></div>
+    <div class="star" style="top:72%;left:82%;animation-duration:2.4s;animation-delay:0.4s;width:3px;height:3px;"></div>
+    <div class="star" style="top:80%;left:15%;animation-duration:2.6s;animation-delay:0.8s;"></div>
+    <div class="star" style="top:88%;left:55%;animation-duration:3.2s;animation-delay:1.0s;width:2px;height:2px;"></div>
+    <div class="star" style="top:92%;left:70%;animation-duration:2.3s;animation-delay:0.6s;"></div>
+    <div class="star" style="top:18%;left:30%;animation-duration:2.8s;animation-delay:1.2s;width:2px;height:2px;"></div>
+
+    <!-- 水晶球 -->
+    <div class="crystal-ball">🔮</div>
+
+    <!-- 品牌 -->
+    <div class="brand-title">✦ 星空極光塔羅 ✦</div>
+    <div class="brand-sub">SHUIMUMUU TAROT</div>
+
+    <!-- Loading 資訊 -->
+    <div class="loading-msg">星辰正在為你準備<span id="dots">...</span></div>
+    <div class="progress-track"><div class="progress-bar"></div></div>
+    <div class="status-text" id="status"></div>
+
+    <script>
+        // ===== 設定 =====
+        var RENDER_URL = 'https://shuimumuu-tarot.onrender.com';
+        var CHECK_INTERVAL = 3000;  // 每 3 秒檢查一次
+        var MAX_WAIT = 120000;      // 最多等 120 秒
+
+        // ===== 點點動畫 =====
+        var dotsEl = document.getElementById('dots');
+        var di = 0;
+        var dotFrames = ['', '.', '..', '...'];
+        setInterval(function() { dotsEl.textContent = dotFrames[++di % 4]; }, 400);
+
+        // ===== 狀態文字 =====
+        var statusEl = document.getElementById('status');
+        var statusMsgs = [
+            '正在喚醒星空...',
+            '星辰正在校準頻率...',
+            '宇宙能量正在匯聚...',
+            '塔羅牌正在甦醒...',
+            '幾乎準備好了...'
+        ];
+        var si = 0;
+        setInterval(function() {
+            statusEl.textContent = statusMsgs[si % statusMsgs.length];
+            si++;
+        }, 5000);
+
+        // ===== 偵測 Render 是否就緒 =====
+        var startTime = Date.now();
+
+        function checkReady() {
+            fetch(RENDER_URL + '/api/draw', { method: 'POST', mode: 'cors' })
+                .then(function(res) {
+                    if (res.ok) {
+                        // 伺服器就緒！跳轉
+                        statusEl.textContent = '✨ 星空已準備就緒！';
+                        document.body.classList.add('fade-out');
+                        setTimeout(function() {
+                            window.location.href = RENDER_URL;
+                        }, 600);
+                    } else {
+                        retry();
+                    }
+                })
+                .catch(function() {
+                    retry();
+                });
+        }
+
+        function retry() {
+            if (Date.now() - startTime > MAX_WAIT) {
+                // 超時，直接跳轉讓 Render 自己處理
+                statusEl.textContent = '正在前往星空...';
+                window.location.href = RENDER_URL;
+                return;
+            }
+            setTimeout(checkReady, CHECK_INTERVAL);
+        }
+
+        // 啟動檢查
+        checkReady();
+    </script>
+</body>
+</html>
