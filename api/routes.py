@@ -15,6 +15,12 @@ class InterpretRequest(BaseModel):
     is_reversed: bool = Field(..., description="是否逆位")
 
 
+@router.get("/health")
+async def health_check():
+    """輕量健康檢查，用於 PWA 偵測後端是否已喚醒"""
+    return {"status": "ok"}
+
+
 @router.post("/draw")
 async def draw_card():
     """隨機抽取一張塔羅牌"""

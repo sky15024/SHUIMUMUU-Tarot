@@ -1,9 +1,12 @@
 /* ============================================
    SHUIMUMUU 星空極光塔羅 — Service Worker
-   策略：全部改為 Network First (網路優先)，確保隨時抓取最新版面
+   策略：
+   - 靜態資源 / HTML → Stale-While-Revalidate（快取優先，背景更新）
+     → PWA 冷啟動時秒開，不會白屏
+   - API 請求 → Network First（需要即時資料）
    ============================================ */
 
-const CACHE_NAME = 'shuimumuu-tarot-v3';
+const CACHE_NAME = 'shuimumuu-tarot-v4';
 const STATIC_ASSETS = [
   '/',
   '/static/css/style.css',
@@ -33,11 +36,11 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 攔截請求：網路優先 (Network First)
+// 攔截請求
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // API 請求 → 網路優先，失敗則回傳提示
+  // ── API 請求 → 網路優先 (Network First) ──
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
       fetch(event.request).catch(() => {
@@ -49,23 +52,26 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 靜態資源與頁面 → 網路優先，失敗才讀取快取
+  // ── 靜態資源與頁面 → Stale-While-Revalidate ──
+  // 立即從快取回應（秒開），同時背景抓最新版本更新快取
   event.respondWith(
-    fetch(event.request).then((response) => {
-      // 判斷是否為 Render 喚醒畫面 (通常是 503 Service Unavailable)
-      if (!response.ok && response.status === 503) {
-        return caches.match(event.request).then(cached => cached || response);
-      }
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.match(event.request).then((cachedResponse) => {
+        // 不論快取是否命中，都去網路抓最新的（背景更新）
+        const fetchPromise = fetch(event.request).then((networkResponse) => {
+          // 只快取同源的成功回應
+          if (networkResponse.ok && url.origin === self.location.origin) {
+            cache.put(event.request, networkResponse.clone());
+          }
+          return networkResponse;
+        }).catch(() => {
+          // 網路失敗時，回傳快取（如果有的話）
+          return cachedResponse;
+        });
 
-      // 成功取得最新資源，動態更新快取
-      if (response.ok && url.origin === self.location.origin) {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-      }
-      return response;
-    }).catch(() => {
-      // 網路失敗（伺服器沒開）時，從快取尋找
-      return caches.match(event.request);
+        // 快取命中 → 立即回傳快取版本；快取未命中 → 等網路回應
+        return cachedResponse || fetchPromise;
+      });
     })
   );
 });
