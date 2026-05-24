@@ -9,6 +9,12 @@ engine = TarotEngine()
 interpreter = TarotInterpreter()
 
 
+@router.get("/health")
+async def health_check():
+    """健康檢查（供 UptimeRobot 等監控服務使用）"""
+    return {"status": "ok"}
+
+
 class InterpretRequest(BaseModel):
     user_input: str = Field(..., min_length=1, max_length=1000, description="使用者輸入的心情、煩惱、行程等")
     card_id: int = Field(..., ge=0, le=77, description="牌的 ID")
