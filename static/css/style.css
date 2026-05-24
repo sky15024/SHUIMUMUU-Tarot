@@ -914,6 +914,13 @@ body {
   text-align: center;
 }
 
+.btn-emoji {
+  display: block;
+  margin-bottom: 8px; /* 增加與文字的間距，視覺更舒適 */
+  font-size: 1.15rem; /* 微調 Emoji 大小讓它更有質感 */
+  line-height: 1;
+}
+
 .left-toggle-btn:hover {
   background: rgba(40, 30, 80, 0.96);
   transform: translateX(4px);
@@ -1402,6 +1409,12 @@ body {
     .left-toggle-btn.active {
         background: rgba(139, 92, 246, 0.2);
         box-shadow: none;
+    }
+    .btn-emoji {
+        display: block;
+        margin-bottom: 8px; /* 手機版特別拉開間距，防止太擠 */
+        font-size: 1.1rem;
+        line-height: 1;
     }
     .left-tab:last-child .left-toggle-btn {
         border-right: none;
