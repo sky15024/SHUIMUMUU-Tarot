@@ -1487,7 +1487,7 @@ body {
         position: fixed;
         left: 0;
         right: 0;
-        bottom: calc(82px + env(safe-area-inset-bottom, 12px)); /* 向上推開（底部欄高度約82px + 安全區），徹底避免遮擋 */
+        bottom: calc(66px + env(safe-area-inset-bottom, 12px)); /* 向上推開（底部欄實際高度約66px + 安全區），完美貼合底部欄，消除空隙 */
         top: auto;
         transform: translateY(100%);
         width: 100%;
