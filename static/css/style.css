@@ -984,6 +984,7 @@ body {
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
   text-align: center;
+  margin-top: 12px; /* 增加頂部間距，預留與標題邊框的呼吸空間 */
 }
 
 .interactive-area {
@@ -1041,6 +1042,7 @@ body {
   font-size: 1rem;
   font-weight: bold;
   color: var(--accent-gold);
+  margin-bottom: 12px; /* 增加底部外邊距，防止分數指標緊貼按鈕頂部邊緣 */
 }
 
 /* Music Banner */
@@ -1454,6 +1456,7 @@ body {
 
     .left-toggle-btn {
         width: 100%;
+        height: 100%; /* 強制讓所有按鈕填滿 100% 容器高度（包括只有兩個字元的下載按鈕），確保 active 高亮完全滿版！ */
         border-radius: 0;
         border: none;
         border-right: 1px solid rgba(255, 255, 255, 0.06);
