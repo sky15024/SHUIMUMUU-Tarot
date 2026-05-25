@@ -1,0 +1,36 @@
+# SHUIMUMUU Tarot Backend - Agentic AI Development Guidelines
+
+This file defines the project-specific rules, constraints, and workflows for any Agentic AI Coding Assistant working on this codebase. These rules MUST be read and followed strictly during every task.
+
+---
+
+## 📌 Core Rule: Version Synchronization (版號同步規則)
+
+Every time you modify the stylesheet CSS or layout elements and bump the cache-buster version suffix in `static/index.html` (e.g., `style.css?v=2.3.x`):
+1. **You MUST synchronously update the foot note version number** at the bottom of the page in `static/index.html` (inside `<p class="footer-note">v2.3.x</p>`) to the exact same version number (e.g., `v2.3.x`).
+2. Keep the version suffix in `static/index.html` and the footer note perfectly in sync so the user and developer always see the correct, updated release version.
+
+---
+
+## 🎨 Layout & UI Design Guidelines (排版與設計準則)
+
+### 1. Music Banner Layout (.music-banner)
+- **Compact & Centered**: Keep the banner width compact (`width: fit-content; max-width: 100%; margin: 0 auto;`) and items centered (`justify-content: center;`). Never let the banner stretch fully across wide panels leaving empty gaps.
+- **Deformation Prevention**: Always set `flex-shrink: 0;` on the circular jellyfish logo wrapper (`.music-logo-wrapper`) and SVG icons (`.music-icon`) to absolutely prevent the circle or SVG from getting squeezed/deformed into ellipses.
+- **Responsive Stack**: On viewports ≤ 300px (like high zoom or extremely narrow windows), stack the banner elements vertically (`flex-direction: column; text-align: center;`) for clean, gorgeous, and bug-free mobile responsiveness.
+
+### 2. Sidebar Button Spacing (.left-toggle-btn)
+- Keep the spacing between sidebar emojis/text to exactly `3.5px` (`margin-bottom: 3.5px;` on `.btn-emoji`). This ensures the emojis and vertical text are perfectly proportioned.
+
+### 3. Desktop Single Row
+- Ensure the music banner stays as a single horizontal line (`flex-wrap: nowrap;` by default) on standard desktop sidebar panels (width 280px).
+
+---
+
+## 🚀 Git & Deployment Workflow (Git 與部署工作流程)
+
+- After finishing any edits and making sure they build/render perfectly:
+  1. Stage all modifications: `git add .`
+  2. Commit with a descriptive message: `git commit -m "..."`
+  3. Push to main: `git push origin main`
+- Pushing to GitHub automatically triggers the Render platform Auto-Deploy pipeline (takes ~2 minutes to sync). Always notify the user that their cloud version is being compiled and will sync shortly!
