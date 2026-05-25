@@ -1048,9 +1048,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap; /* 允許自動彈性換行，防止超高比例縮放時強行橫向撐開 */
-  gap: 16px; /* 恢復上一版的優雅 16px 間距 */
-  padding: 14px 16px; /* 恢復上一版的 14px 16px 內邊距，大氣精緻 */
+  gap: 12px; /* 精緻的 12px 間距，確保在桌機側邊欄寬度內不會折行 */
+  padding: 14px 12px; /* 縮小左右內邊距至 12px 以節省空間 */
   background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(0, 212, 255, 0.1) 100%);
   border: 1px solid rgba(139, 92, 246, 0.3);
   border-radius: 12px;
