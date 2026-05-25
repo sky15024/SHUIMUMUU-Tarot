@@ -896,19 +896,19 @@ body {
   writing-mode: horizontal-tb;
   line-height: 1.4;
   padding: 12px 6px;
-  border: none;
-  border-radius: 0 12px 12px 0;
-  background: rgba(18, 18, 40, 0.94);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-left: none;
-  color: #fff;
+  border-radius: 0 12px 12px 0;
+  /* 頂級毛玻璃防爆板：極高質感漸層反光 + 50% 半透明深色底 */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(10, 10, 26, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: rgba(255, 255, 255, 0.9);
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: bold;
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
-  transition: background 0.3s, transform 0.3s;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   z-index: 2;
   width: 38px;
   text-align: center;
@@ -916,20 +916,27 @@ body {
 
 .btn-emoji {
   display: block;
-  margin-bottom: 8px; /* 增加與文字的間距，視覺更舒適 */
+  margin-bottom: 3.5px; /* 縮小與下方文字的間距至 3.5px */
   font-size: 1.15rem; /* 微調 Emoji 大小讓它更有質感 */
   line-height: 1;
 }
 
 .left-toggle-btn:hover {
-  background: rgba(40, 30, 80, 0.96);
+  /* 懸停：背景變亮且散發細緻的極光紫光 */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%), rgba(30, 20, 60, 0.6);
+  border-color: rgba(167, 139, 250, 0.5);
+  box-shadow: 6px 0 28px rgba(139, 92, 246, 0.4), inset 0 0 8px rgba(255, 255, 255, 0.1);
   transform: translateX(4px);
+  color: #fff;
 }
 
 .left-toggle-btn.active {
-  background: rgba(80, 60, 160, 0.96);
-  box-shadow: 4px 0 30px rgba(167, 139, 250, 0.6);
+  /* 啟用：注入極光紫漸層，散發高飽和度的能量發光效果 */
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.35) 0%, rgba(0, 212, 255, 0.2) 100%), rgba(20, 10, 45, 0.65);
+  border-color: rgba(167, 139, 250, 0.8);
+  box-shadow: 6px 0 35px rgba(167, 139, 250, 0.65), inset 0 0 12px rgba(255, 255, 255, 0.2);
   transform: translateX(0);
+  color: #fff;
 }
 
 .left-panel {
@@ -950,6 +957,7 @@ body {
   display: flex;
   flex-direction: column;
   opacity: 0;
+  overflow-x: hidden; /* 確保在任何縮放比例下均絕對不會出現水平滾動條 */
 }
 
 .left-tab.open .left-panel {
@@ -1039,14 +1047,21 @@ body {
 .music-banner {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px;
+  justify-content: center;
+  flex-wrap: wrap; /* 允許自動彈性換行，防止超高比例縮放時強行橫向撐開 */
+  gap: 16px; /* 恢復上一版的優雅 16px 間距 */
+  padding: 14px 16px; /* 恢復上一版的 14px 16px 內邊距，大氣精緻 */
   background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(0, 212, 255, 0.1) 100%);
   border: 1px solid rgba(139, 92, 246, 0.3);
   border-radius: 12px;
   text-decoration: none;
   color: white;
   transition: transform 0.3s, background 0.3s;
+  
+  /* 縮短底框：使用 fit-content 自動緊貼內容，並居中對齊 */
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
 }
 .music-banner:hover {
   transform: translateY(-2px);
@@ -1054,10 +1069,56 @@ body {
 }
 .music-icon {
   font-size: 2rem;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0; /* 絕對防止圖標被擠壓變形 */
 }
 .music-text {
-  font-size: 0.95rem;
-  line-height: 1.4;
+  font-size: 0.82rem; /* 略微縮小字型，確保完美容納不折行 */
+  line-height: 1.35;
+  white-space: nowrap; /* 強制每一行文字絕對不折行，始終維持完美的兩行 */
+}
+.music-logo-wrapper {
+  width: 52px; /* 圓形框的大小維持 52px，垂直完美對齊 YouTube LOGO */
+  height: 52px;
+  flex-shrink: 0; /* 絕對防止圓形 LOGO 被擠壓成橢圓形變形！ */
+  border-radius: 50%; /* 將正方形圖片切為圓形外框 */
+  overflow: hidden; /* 切除圓形框外的部分，實現內部下移 */
+  border: 1.5px solid rgba(255, 255, 255, 0.15); /* 微光白邊 */
+  background-color: #2996d9; /* 注入與 LOGO 相同的藍色底色，完美填滿內部下移產生的頂部空隙！ */
+  display: block;
+  align-self: center; /* 確保外圈在 Flex 容器中完美垂直居中，與 YouTube LOGO 水平對齊 */
+  transition: box-shadow 0.3s ease;
+}
+.music-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translateY(3.5px); /* 將內側水母與圓圈圖案下移 3.5px 達到完美視覺置中，搭配 PNG 透明背景解決黑角問題！ */
+  transition: transform 0.3s ease;
+}
+.music-banner:hover .music-logo-wrapper {
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.4); /* 懸浮時外圈微光發光 */
+}
+.music-banner:hover .music-logo {
+  transform: translateY(3.5px) scale(1.08); /* 懸停時微幅放大且維持下移量 */
+}
+
+/* 針對極高比例縮放（如 400% 縮放且視窗極窄）或超小螢幕的極致響應式微調 */
+@media (max-width: 300px) {
+  .music-banner {
+    flex-direction: column !important; /* 寬度過窄時，自動變為垂直排列，排版完美不跑位 */
+    gap: 12px !important;
+    padding: 16px 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .music-text {
+    text-align: center !important; /* 垂直排列時文字置中 */
+  }
+  .music-logo-wrapper {
+    align-self: center !important;
+  }
 }
 
 /* 動畫與特效 */
@@ -1358,7 +1419,7 @@ body {
     /* --- 主內容留出底部空間 --- */
     .main-content {
         padding: 16px 14px;
-        padding-bottom: 72px; /* 為底部固定欄騰出空間 */
+        padding-bottom: calc(72px + env(safe-area-inset-bottom, 12px)); /* 為底部固定欄騰出空間（包含安全區域） */
     }
 
     .site-header { margin-bottom: 24px; }
@@ -1375,11 +1436,12 @@ body {
         justify-content: center;
         gap: 0;
         z-index: 1001;
-        background: rgba(10, 10, 30, 0.95);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%), rgba(10, 10, 26, 0.6);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         padding: 0;
+        padding-bottom: env(safe-area-inset-bottom, 12px); /* 預留底部安全區域（如 iPhone Home 條）或 12px 空距 */
         pointer-events: auto;
     }
 
@@ -1407,12 +1469,13 @@ body {
         background: rgba(255, 255, 255, 0.05);
     }
     .left-toggle-btn.active {
-        background: rgba(139, 92, 246, 0.2);
-        box-shadow: none;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(0, 212, 255, 0.15) 100%), rgba(139, 92, 246, 0.1);
+        border-top: 2px solid rgba(167, 139, 250, 0.6); /* 頂部有一圈高質感的紫光邊框 */
+        box-shadow: inset 0 0 10px rgba(167, 139, 250, 0.15);
     }
     .btn-emoji {
         display: block;
-        margin-bottom: 8px; /* 手機版特別拉開間距，防止太擠 */
+        margin-bottom: 3.5px; /* 縮小與下方文字的間距至 3.5px */
         font-size: 1.1rem;
         line-height: 1;
     }
@@ -1425,13 +1488,14 @@ body {
         position: fixed;
         left: 0;
         right: 0;
-        bottom: 56px; /* 底部欄高度之上 */
+        bottom: calc(82px + env(safe-area-inset-bottom, 12px)); /* 向上推開（底部欄高度約82px + 安全區），徹底避免遮擋 */
         top: auto;
         transform: translateY(100%);
         width: 100%;
         max-height: 60vh;
         border-radius: 16px 16px 0 0;
         overflow-y: auto;
+        overflow-x: hidden; /* 確保在高度縮放或極小寬度下絕對不會出現水平滾動條 */
         box-shadow: 0 -6px 32px rgba(0, 0, 0, 0.5);
     }
 
@@ -1517,7 +1581,7 @@ body {
     .interactive-area { height: 180px; }
     .left-panel { max-height: 55vh; }
     .left-panel-header { padding: 12px; font-size: 1rem; }
-    .left-panel-body { padding: 12px; gap: 12px; }
+    .left-panel-body { padding: 12px 12px 24px 12px; gap: 12px; } /* 增加底部的 padding (24px) 讓分數指標更有呼吸空間 */
 }
 
 /* ===== 極小螢幕 (≤360px) ===== */
