@@ -1060,7 +1060,7 @@ body {
   /* 縮短底框：使用 fit-content 自動緊貼內容，並居中對齊 */
   width: fit-content;
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0 auto 16px auto; /* 底部加入 16px 外邊距，預留與視窗底邊的呼吸空間，避免太空或太近 */
 }
 .music-banner:hover {
   transform: translateY(-2px);
@@ -1440,7 +1440,7 @@ body {
         -webkit-backdrop-filter: blur(20px);
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         padding: 0;
-        padding-bottom: env(safe-area-inset-bottom, 12px); /* 預留底部安全區域（如 iPhone Home 條）或 12px 空距 */
+        padding-bottom: 0; /* 移除容器底部的 padding，改為按鈕本身向下延伸以達到完美滿版！ */
         pointer-events: auto;
     }
 
@@ -1457,7 +1457,7 @@ body {
         border-radius: 0;
         border: none;
         border-right: 1px solid rgba(255, 255, 255, 0.06);
-        padding: 8px 4px;
+        padding: 8px 4px calc(8px + env(safe-area-inset-bottom, 12px)) 4px; /* 向下延伸填滿安全區域，使 active 背景完全滿版，消除底部空隙！ */
         font-size: 0.75rem;
         line-height: 1.2;
         box-shadow: none;
@@ -1496,6 +1496,7 @@ body {
         overflow-y: auto;
         overflow-x: hidden; /* 確保在高度縮放或極小寬度下絕對不會出現水平滾動條 */
         box-shadow: 0 -6px 32px rgba(0, 0, 0, 0.5);
+        border-bottom: none !important; /* 消除面板底部邊框，避免與底部按鈕 Emojis 重疊產生水平橫線 */
     }
 
     .left-tab.open .left-panel {
@@ -1557,7 +1558,7 @@ body {
     .retry-button { padding: 12px 32px; font-size: 0.9rem; }
 
     /* 左側底部欄文字更小 */
-    .left-toggle-btn { font-size: 0.7rem; padding: 6px 2px; }
+    .left-toggle-btn { font-size: 0.7rem; padding: 6px 2px calc(6px + env(safe-area-inset-bottom, 12px)) 2px; }
 
     /* 右側廣告 */
     .ad-sidebar.open .ad-panel { width: 220px; }
